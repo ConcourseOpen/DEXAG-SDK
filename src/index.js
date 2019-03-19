@@ -6,13 +6,13 @@ export class DexAgSdk {
 		this.signer = this.provider.getSigner();
 	}
 
-	sendTrade(trade) {
+	async sendTrade(trade) {
 		const value = ethers.utils.bigNumberify(trade.value);
 		const tx = {
 			to: trade.to,
 			data: trade.data,
 			value: value
 		};
-		this.signer.sendTransaction(tx);
+		await this.signer.sendTransaction(tx);
 	}
 }
