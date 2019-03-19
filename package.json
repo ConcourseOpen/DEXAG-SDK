@@ -1,6 +1,6 @@
 {
   "name": "dexag-sdk",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "SDK for native trading on DEX.AG",
   "main": "lib/index.js",
   "scripts": {
