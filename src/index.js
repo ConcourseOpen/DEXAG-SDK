@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 
-import erc20Abi from '../abi/erc20.json';
+import erc20Abi from './abi/erc20.json';
 
 export class DexAgSdk {
 	constructor(provider) {
