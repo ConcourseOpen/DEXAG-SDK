@@ -21,6 +21,18 @@ export class DexAgSdk {
 		return allowance.gte(tokenAmount);
 	}
 
+	async setAllowance(tradeMetadata) {
+		if (!tradeMetadata.token) {
+			return;
+		}
+		const uintMaxString = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
+		const tokenAddress = tradeMetadata.token.address;
+		const exchangeAddress = tradeMetadata.token.spender;
+		const tokenContract = new ethers.Contract(tokenAddress, erc20Abi, this.signer);
+		const address = await this.signer.getAddress();
+		const allowance = await tokenContract.approve(exchangeAddress, uintMaxString);
+	}
+
 	async sendTrade(trade) {
 		const value = ethers.utils.bigNumberify(trade.value);
 		const tx = {
