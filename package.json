@@ -1,0 +1,23 @@
+{
+  "name": "dexag-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SettleFinance/DEXAG-SDK.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SettleFinance/DEXAG-SDK/issues"
+  },
+  "homepage": "https://github.com/SettleFinance/DEXAG-SDK#readme",
+  "dependencies": {
+    "bignumber.js": "^8.1.1",
+    "ethers": "^4.0.27"
+  }
+}
