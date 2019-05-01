@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 
-import erc20Abi from '../abi/erc20.json';
-import wethAbi from '../abi/weth.json';
+import erc20Abi from '../../abi/erc20.json';
+import wethAbi from '../../abi/weth.json';
 
 const utility = {
 	promisify: (inner) => {
