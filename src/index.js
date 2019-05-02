@@ -78,8 +78,7 @@ export class DexAgSdk {
 
 	async tradeOrder({tx}) {
 		let {input, output, source} = tx.metadata;
-		console.log(tx.metadata, DexAgSdk)
-		var details = {pair: {base:input.address, quote:output.address}, amount: 1, dex: source.dex, isBuying: true}
+		var details = {pair: {base:'test_base', quote:'test_quote'}, amount: 1, dex: source.dex, isBuying: true}
 		DexAgSdk.sendTrade(tx, details)
 	}
 
