@@ -13,6 +13,7 @@ export class DexAgSdk {
 		if (!currentProvider) return; // exit if no web3 found
 		this.provider = new ethers.providers.Web3Provider(currentProvider);
 		this.signer = this.provider.getSigner();
+		window.web3StatusHandler = ()=>{} // preset status handler
 	}
 
 	async validateWeb3(trade) {
@@ -77,8 +78,11 @@ export class DexAgSdk {
 		trading.unwrap(wethContract, amount);
 	}
 
+	// Public Functions
+
 	async getBest({to, from, amount}) {
 		const bestTrade = await trading.getBest({to, from, amount});
 		return bestTrade
 	}
+
 }
