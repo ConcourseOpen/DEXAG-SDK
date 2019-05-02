@@ -103,10 +103,10 @@ const trading = {
 			}
 		});
 	},
-	getBest: async () => {
+	getBest: async ({to, from, amount}) => {
 		return new Promise(resolve => {
 			try {
-				fetch('https://dex.ag/api/trade?from=ETH&to=DAI&fromAmount=100&dex=best', { headers: {'Accept': 'application/json'} })
+				fetch(`https://dex.ag/api/trade?from=${from}&to=${to}&fromAmount=${amount}&dex=best`, { headers: {'Accept': 'application/json'} })
 					.then(response => response.json())
 					.then(data => {
 						resolve(data);
