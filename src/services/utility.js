@@ -86,16 +86,16 @@ const utility = {
 			window.web3StatusHandler('failed', status.hash);
 		}
 	},
-  track: async(status, details)=>{
-    const response = await fetch('/api/send_trade', {
-		method: 'POST',
-	    headers: {
-	      'Accept': 'application/json',
-	      'Content-Type': 'application/json'
-	    },
-	    body: JSON.stringify({status, details})
-	});
-  }
+	track: async(status, details)=>{
+		const response = await fetch('/api/send_trade', {
+			method: 'POST',
+		    headers: {
+		      'Accept': 'application/json',
+		      'Content-Type': 'application/json'
+		    },
+		    body: JSON.stringify({status, details})
+		});
+	}
 };
 
 export default utility;

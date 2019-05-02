@@ -16,15 +16,6 @@ export class DexAgSdk {
 		window.web3StatusHandler = ()=>{} // preset status handler
 	}
 
-	async validateWeb3(trade) {
-		if(this.provider) this.signer = this.provider.getSigner();
-		return validate.web3(trade, this.provider, this.signer);
-	}
-
-	async registerStatusHandler(handler) {
-		window.web3StatusHandler = handler;
-	}
-
 	async sendTrade(trade, details) {
 		const value = ethers.utils.bigNumberify(trade.value);
 		let status = {};
@@ -83,6 +74,22 @@ export class DexAgSdk {
 	async getBest({to, from, amount}) {
 		const bestTrade = await trading.getBest({to, from, amount});
 		return bestTrade
+	}
+
+	async tradeOrder({tx}) {
+		let {input, output, source} = tx.metadata;
+		console.log(tx.metadata, DexAgSdk)
+		var details = {pair: {base:input.address, quote:output.address}, amount: 1, dex: source.dex, isBuying: true}
+		DexAgSdk.sendTrade(tx, details)
+	}
+
+	async validateWeb3(trade) {
+		if(this.provider) this.signer = this.provider.getSigner();
+		return validate.web3(trade, this.provider, this.signer);
+	}
+
+	async registerStatusHandler(handler) {
+		window.web3StatusHandler = handler;
 	}
 
 }
