@@ -15,24 +15,13 @@ const utility = {
 			});
 		});
 	},
-	waitForReceipt: (hash, cb) => {
-		web3.eth.getTransactionReceipt(hash, function(err, receipt) {
-			if (err) {
-				console.log('Error');
-				console.log(err);
-			}
-			if (receipt !== null) {
-				// Transaction went through
-				if (cb) {
-					cb(receipt);
-				}
-			} else {
-				// Try again in 1 second
-				window.setTimeout(function() {
-					utility.waitForReceipt(hash, cb);
-				}, 2000);
-			}
-		});
+	waitForReceipt: async(hash, provider) => {
+		let receipt = null;
+		while (!receipt) {
+			receipt = await provider.getTransactionReceipt(hash);
+			await utility.sleep(2000);
+		}
+		return receipt;
 	},
 	getTokenContract: (trade, signer) => {
 		const tokenAddress = trade.metadata.input.address;
@@ -89,12 +78,15 @@ const utility = {
 	track: async(status, details)=>{
 		const response = await fetch('/api/send_trade', {
 			method: 'POST',
-		    headers: {
-		      'Accept': 'application/json',
-		      'Content-Type': 'application/json'
-		    },
-		    body: JSON.stringify({status, details})
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({status, details})
 		});
+	},
+	sleep: (ms)=> {
+		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 };
 

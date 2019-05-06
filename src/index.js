@@ -58,10 +58,9 @@ export class DexAgSdk {
 		}
 		// Trade sent
 		window.web3StatusHandler('send_trade', status.hash);
-		utility.waitForReceipt(status.hash, function(receipt) {
-			utility.track(status, details)
-			utility.handleReceipt(status, receipt);
-		});
+		const receipt = await utility.waitForReceipt(status.hash, this.provider);
+		utility.track(status, details)
+		utility.handleReceipt(status, receipt);
 	}
 
 	async unwrap(amount) {
