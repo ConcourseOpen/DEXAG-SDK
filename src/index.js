@@ -52,7 +52,12 @@ export class DexAgSdk {
 			if(!window.ethereum.isImToken){
 				window.web3StatusHandler('rejected');
 				return;
-			}else if (typeof err.transactionHash == 'string'){
+			}
+			if (err.errorCode == 1001) {
+				window.web3StatusHandler('rejected');
+				return;
+			}
+			if (typeof err.transactionHash == 'string'){
 				status.hash = err.transactionHash
 			}
 		}
