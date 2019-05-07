@@ -5,7 +5,7 @@ import validate from './services/validate';
 import trading from './services/trading';
 import utility from './services/utility';
 
-export class DexAgSdk {
+export class DEXAG {
 
 	constructor() {
 		if (!window.web3) window.web3 = {};
