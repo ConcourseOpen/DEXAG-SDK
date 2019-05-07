@@ -75,8 +75,8 @@ export class DEXAG {
 
 	// Public Functions
 
-	async getBest({to, from, amount}) {
-		const bestTrade = await trading.getBest({to, from, amount});
+	async getBest({to, from, amount, dex}) {
+		const bestTrade = await trading.getBest({to, from, amount, dex});
 		return bestTrade
 	}
 
