@@ -52,16 +52,20 @@ export class DEXAG {
 			if(!window.ethereum.isImToken){
 				window.web3StatusHandler('rejected');
 				return;
-			}else if (typeof err.transactionHash == 'string'){
+			}
+			if (err.errorCode == 1001) {
+				window.web3StatusHandler('rejected');
+				return;
+			}
+			if (typeof err.transactionHash == 'string'){
 				status.hash = err.transactionHash
 			}
 		}
 		// Trade sent
 		window.web3StatusHandler('send_trade', status.hash);
-		utility.waitForReceipt(status.hash, function(receipt) {
-			utility.track(status, details)
-			utility.handleReceipt(status, receipt);
-		});
+		const receipt = await utility.waitForReceipt(status.hash, this.provider);
+		utility.track(status, details)
+		utility.handleReceipt(status, receipt);
 	}
 
 	async unwrap(amount) {
