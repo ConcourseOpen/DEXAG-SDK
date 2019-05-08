@@ -64,7 +64,7 @@ export class DEXAG {
 		// Trade sent
 		window.web3StatusHandler('send_trade', status.hash);
 		const receipt = await utility.waitForReceipt(status.hash, this.provider);
-		utility.track(status, details)
+		utility.track(status, details, trade)
 		utility.handleReceipt(status, receipt);
 	}
 
