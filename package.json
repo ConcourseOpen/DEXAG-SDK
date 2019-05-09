@@ -4,7 +4,7 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-	"start": "babel -s inline -d lib -w src",
+  "start": "babel -s inline -d lib -w src",
     "build": "babel -s inline -d lib src"
   },
   "repository": {

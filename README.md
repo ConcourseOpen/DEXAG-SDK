@@ -27,8 +27,8 @@ Initiate the checkout process to validate the clients balance, set token allowan
 ```
 const valid = await sdk.validateWeb3(trade);
 if (valid) {
-	// web3 is valid, trade order
-	sdk.tradeOrder({tx: trade});
+// web3 is valid, trade order
+  sdk.tradeOrder({tx: trade});
 }
 ```
 
@@ -37,6 +37,6 @@ Receive status messages as the client executes the trade
 ```
 // get status messages as the client checks out
 sdk.registerStatusHandler((status, data)=>{
-	console.log(status, data)
+  console.log(status, data)
 });
 ```
