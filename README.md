@@ -16,7 +16,7 @@ import {DEXAG} from 'dexag-sdk'
 const sdk = new DEXAG();
 ```
 
-## Buy 1 DAI with ETH
+## Get the best price for 1 DAI with ETH
 ```
 // trade contains all details to execute the trade
 let trade = await sdk.getBest({to: 'DAI', from: 'ETH', amount: 1})
