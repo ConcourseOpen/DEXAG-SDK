@@ -25,7 +25,7 @@ const account = {
     const wei = utility.promisify(cb => web3.eth.getBalance(address, cb));
     try {
       const ethBalance = await wei;
-      const ethAmount = trade.value;
+      const ethAmount = trade.trade.value;
       return (ethBalance.gte(ethAmount));
     } catch (err) {
       console.log(err);
