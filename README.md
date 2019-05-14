@@ -7,7 +7,7 @@ Try trading on [DEX.AG](https://dex.ag) or [DEX.AG Checkout](https://checkout.de
 
 Install the package with:
 ```
-npm install dexag --save
+npm install dexag-sdk --save
 ```
 
 ## Usage
