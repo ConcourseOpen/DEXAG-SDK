@@ -17,11 +17,11 @@ export class DEXAG {
   }
 
   async sendTrade(trade, details) {
-    const value = ethers.utils.bigNumberify(trade.value);
+    const value = ethers.utils.bigNumberify(trade.trade.value);
     let status = {};
     const tx = {
-      to: trade.to,
-      data: trade.data,
+      to: trade.trade.to,
+      data: trade.trade.data,
       value: value,
       gasLimit: 500000
     };
