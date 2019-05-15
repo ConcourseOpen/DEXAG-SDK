@@ -13,7 +13,7 @@ const validate = {
       return false;
     }
 
-    // Ask user to unlock and connect
+    // ask user to unlock and connect
     if (window.web3 == undefined || window.web3.eth.accounts[0] == undefined) {
       try {
         await window.ethereum.enable();
@@ -23,6 +23,13 @@ const validate = {
         return false;
       }
     }
+
+    // Auto unlock didnt work, wallet is still locked
+    if(window.web3.eth.accounts[0] == undefined){
+      window.web3StatusHandler('unlock_wallet');
+      return;
+    }
+
     // check web3 trading is supported for this dex
     if (trade.error == 'No trades') {
       return false;
