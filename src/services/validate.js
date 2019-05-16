@@ -58,7 +58,11 @@ const validate = {
       balance = await account.getERC20Balance(trade, provider, signer);
     }else{
       // eth
-      balance = await account.getETHBalance(trade);
+      try{
+        balance = await account.getETHBalance(trade);
+      }catch(err){
+        console.log(err)
+      }
     }
     if (!balance) {
       window.web3StatusHandler('balance');
