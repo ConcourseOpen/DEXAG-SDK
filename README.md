@@ -19,7 +19,7 @@ const sdk = new DEXAG();
 ## Get the best price for 1 DAI with ETH
 ```
 // trade contains all details to execute the trade
-let trade = await sdk.getBest({to: 'DAI', from: 'ETH', amount: 1})
+let trade = await sdk.getTrade({to: 'DAI', from: 'ETH', amount: 1})
 ```
 
 ## Checkout
