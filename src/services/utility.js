@@ -76,7 +76,7 @@ const utility = {
     }
   },
   track: async(status, details, trade)=>{
-    const response = await fetch('/api/send_trade', {
+    const response = await fetch('https://api.dex.ag/send_trade', {
       method: 'POST',
       headers: {
       'Accept': 'application/json',

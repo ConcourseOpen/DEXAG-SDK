@@ -102,10 +102,25 @@ const trading = {
       }
     });
   },
-  getBest: async ({to, from, amount, dex}) => {
+  getTrade: async ({to, from, amount, dex}) => {
     return new Promise(resolve => {
       try {
-        fetch(`https://dex.ag/api/trade?from=${from}&to=${to}&toAmount=${amount}&dex=${dex||'best'}`, { headers: {'Accept': 'application/json'} })
+        fetch(`https://api.dex.ag/api/trade?from=${from}&to=${to}&toAmount=${amount}&dex=${dex||'best'}`, { headers: {'Accept': 'application/json'} })
+        .then(response => response.json())
+        .then(data => {
+          resolve(data);
+        });
+      } catch (err) {
+        // default to 5 if error
+        resolve('err')
+        console.log('api error')
+      }
+    });
+  },
+  getPrice: async ({to, from, amount, dex}) => {
+    return new Promise(resolve => {
+      try {
+        fetch(`https://api.dex.ag/api/price?from=${from}&to=${to}&toAmount=${amount}&dex=${dex||'all'}`, { headers: {'Accept': 'application/json'} })
         .then(response => response.json())
         .then(data => {
           resolve(data);

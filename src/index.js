@@ -75,9 +75,14 @@ export class DEXAG {
 
   // Public Functions
 
-  async getBest({to, from, amount, dex}) {
-    const bestTrade = await trading.getBest({to, from, amount, dex});
-    return bestTrade
+  async getTrade({to, from, amount, dex}) {
+    const trade = await trading.getTrade({to, from, amount, dex});
+    return trade
+  }
+
+  async getPrice({to, from, amount, dex}) {
+    const trade = await trading.getPrice({to, from, amount, dex});
+    return trade
   }
 
   async tradeOrder({tx}) {
@@ -94,5 +99,5 @@ export class DEXAG {
   async registerStatusHandler(handler) {
     window.web3StatusHandler = handler;
   }
-  
+
 }
