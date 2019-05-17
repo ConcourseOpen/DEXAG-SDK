@@ -105,7 +105,7 @@ const trading = {
   getTrade: async ({to, from, amount, dex}) => {
     return new Promise(resolve => {
       try {
-        fetch(`https://api.dex.ag/api/trade?from=${from}&to=${to}&toAmount=${amount}&dex=${dex||'best'}`, { headers: {'Accept': 'application/json'} })
+        fetch(`https://api.dex.ag/trade?from=${from}&to=${to}&toAmount=${amount}&dex=${dex||'best'}`, { headers: {'Accept': 'application/json'} })
         .then(response => response.json())
         .then(data => {
           resolve(data);
@@ -120,7 +120,7 @@ const trading = {
   getPrice: async ({to, from, amount, dex}) => {
     return new Promise(resolve => {
       try {
-        fetch(`https://api.dex.ag/api/price?from=${from}&to=${to}&toAmount=${amount}&dex=${dex||'all'}`, { headers: {'Accept': 'application/json'} })
+        fetch(`https://api.dex.ag/price?from=${from}&to=${to}&toAmount=${amount}&dex=${dex||'all'}`, { headers: {'Accept': 'application/json'} })
         .then(response => response.json())
         .then(data => {
           resolve(data);
