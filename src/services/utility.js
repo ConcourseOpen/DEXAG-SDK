@@ -79,8 +79,8 @@ const utility = {
     const response = await fetch('https://api.dex.ag/send_trade', {
       method: 'POST',
       headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({status, details, trade})
     });

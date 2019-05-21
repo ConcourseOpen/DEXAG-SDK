@@ -86,8 +86,9 @@ export class DEXAG {
   }
 
   async tradeOrder({tx}) {
-    let {input, output, source} = tx.metadata;
-    var details = {pair: {base:'test_base', quote:'test_quote'}, amount: 1, dex: source.dex, isBuying: true}
+    let {input, output, source, query} = tx.metadata;
+    var details = {pair: {base:query.from, quote:query.to}, amount: query.fromAmount||query.toAmount, dex: source.dex, isBuying: true}
+    console.log(details)
     this.sendTrade(tx, details)
   }
 
