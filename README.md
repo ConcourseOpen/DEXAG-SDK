@@ -4,8 +4,8 @@ See the [DEXAG Docs](https://docs.dex.ag).
 Try trading on [DEX.AG](https://dex.ag) or [DEX.AG Checkout](https://checkout.dex.ag)
 
 ## Installation
+Install the package from [NPM](https://www.npmjs.com/package/dexag-sdk)
 
-Install the package with:
 ```
 npm install dexag-sdk --save
 ```
