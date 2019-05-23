@@ -45,7 +45,7 @@ const trading = {
       }
     });
   },
-  wrap: async(wethContract, amount) => {
+  wrap: async(wethContract, amount, provider) => {
     const fast_gas = await trading.getGas();
     return new Promise(resolve => {
     try {
@@ -62,13 +62,12 @@ const trading = {
         const promise = wethContract.deposit(txOptions);
 
         // wrap sent
-        promise.then(function(status) {
+        promise.then(async function(status) {
           window.web3StatusHandler('send_wrap', status.hash);
-          utility.waitForReceipt(status.hash, function() {
-            // wrap mined
-            window.web3StatusHandler('mined_wrap', status.hash);
-            resolve(true);
-          });
+          const receipt = await utility.waitForReceipt(status.hash, provider);
+          // wrap mined
+          window.web3StatusHandler('mined_wrap', status.hash);
+          resolve(true);
         }).catch(function(err) {
           resolve(false);
         });

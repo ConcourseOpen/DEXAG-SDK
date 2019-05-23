@@ -48,7 +48,7 @@ const validate = {
     }
     // wrap ether if necessary
     const wethContract = utility.getWethContract(signer);
-    const wrapping = await trading.wrap(wethContract, etherToWrap);
+    const wrapping = await trading.wrap(wethContract, etherToWrap, provider);
     if (!wrapping) return false;
 
     // Check if balance is insufficient
