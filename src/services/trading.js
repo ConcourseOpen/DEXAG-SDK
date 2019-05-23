@@ -19,7 +19,7 @@ const trading = {
       }
     });
   },
-  setAllowance: async(tokenContract, exchangeAddress) => {
+  setAllowance: async(tokenContract, exchangeAddress, provider) => {
     const fast_gas = await trading.getGas();
     return new Promise(resolve => {
       try {
@@ -27,14 +27,14 @@ const trading = {
         console.log(fast_gas);
         const promise = tokenContract.functions.approve(exchangeAddress, uintMax, {gasPrice: fast_gas});
 
-        promise.then(function(status) {
+        promise.then(async function(status) {
           console.log(status);
           window.web3StatusHandler('send_trade', status.hash);
-
-          utility.waitForReceipt(status.hash, function() {
-            window.web3StatusHandler('mined_approve', status.hash);
-            resolve(true);
-          });
+          // wait for mining to finish
+          const receipt = await utility.waitForReceipt(status.hash, provider);
+          // mined
+          window.web3StatusHandler('mined_approve', status.hash);
+          resolve(true);
         }).catch(function(err) {
           resolve(false);
           console.log('Transaction rejected ' + err);

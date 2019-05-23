@@ -72,7 +72,7 @@ const validate = {
       window.web3StatusHandler('balance');
       return false;
     }
-
+    // handle token allowance
     if (trade.metadata.input) {
       // get contracts
       const tokenContract = utility.getTokenContract(trade, signer);
@@ -86,7 +86,7 @@ const validate = {
       if (allowance.lt(tokenAmount)) {
         // allowance needs to be granted
         window.web3StatusHandler('allowance');
-        const trading_allowance = await trading.setAllowance(tokenContract, exchangeAddress);
+        const trading_allowance = await trading.setAllowance(tokenContract, exchangeAddress, provider);
         // check if token allowance is not set
         if(!trading_allowance) return false;
       }
