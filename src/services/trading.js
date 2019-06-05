@@ -20,11 +20,10 @@ const trading = {
     });
   },
   setAllowance: async(tokenContract, exchangeAddress, provider) => {
-    const fast_gas = await trading.getGas();
     return new Promise(resolve => {
       try {
         const uintMax = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
-        console.log(fast_gas);
+        const fast_gas = await trading.getGas();
         const promise = tokenContract.functions.approve(exchangeAddress, uintMax, {gasPrice: fast_gas});
 
         promise.then(async function(status) {
@@ -46,7 +45,6 @@ const trading = {
     });
   },
   wrap: async(wethContract, amount, provider) => {
-    const fast_gas = await trading.getGas();
     return new Promise(resolve => {
     try {
       if (amount == 0) {
@@ -55,6 +53,7 @@ const trading = {
         // show wrap init message
         window.web3StatusHandler('request_wrap');
         const value = ethers.utils.bigNumberify(amount);
+        const fast_gas = await trading.getGas();
         const txOptions = {
           value,
           gasPrice: fast_gas
