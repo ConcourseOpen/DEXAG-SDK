@@ -5,18 +5,28 @@ import validate from './services/validate';
 import trading from './services/trading';
 import utility from './services/utility';
 
-export class DEXAG {
+function fromPrivateKey(privateKey) {
+  const projectId = '135bcba44428495c86d17c754d38649d';
+  const provider = new ethers.providers.InfuraProvider('homestead', projectId);
+  const signer = new ethers.Wallet(privateKey, provider);
+  return new DEXAG(provider, signer);
+}
 
-  constructor() {
-    if (!window.web3) window.web3 = {};
-    let { currentProvider } = window.web3;
-    if (!currentProvider) return; // exit if no web3 found
-    this.provider = new ethers.providers.Web3Provider(currentProvider);
-    this.signer = this.provider.getSigner();
-    window.web3StatusHandler = ()=>{} // preset status handler
+function fromProvider(currentProvider) {
+  const provider = new ethers.providers.Web3Provider(currentProvider);
+  const signer = provider.getSigner();
+  return new DEXAG(provider, signer);
+}
+
+class DEXAG {
+  constructor(provider, signer) {
+    this.provider = provider;
+    this.signer = signer;
+    this.statusHandler = () => {} // preset status handler
   }
 
   async sendTrade(trade, details) {
+    this.statusHandler('clear');
     const value = ethers.utils.bigNumberify(trade.trade.value);
     let status = {};
     const tx = {
@@ -27,11 +37,11 @@ export class DEXAG {
     };
     // Set gas and handle bancor exception
     if(details.dex!='bancor'){
-      window.web3StatusHandler('init');
+      this.statusHandler('init');
       const fast_gas = await trading.getGas();
       tx.gasPrice = fast_gas;
     }else{
-      window.web3StatusHandler('bancor_notice');
+      this.statusHandler('bancor_notice');
       tx.gasPrice = ethers.utils.bigNumberify(trade.metadata.gasPrice);
     }
     // estimate gas
@@ -41,7 +51,7 @@ export class DEXAG {
       const estimate = await this.provider.estimateGas(estimateTx);
       tx.gasLimit = parseInt(estimate.toString())*1.2
     }catch(err){
-      window.web3StatusHandler('bad_tx');
+      this.statusHandler('bad_tx');
       return;
     }
     // attempt sending trade
@@ -50,11 +60,11 @@ export class DEXAG {
     }catch(err){
       // issue sending tx
       if(!window.ethereum.isImToken){
-        window.web3StatusHandler('rejected');
+        this.statusHandler('rejected');
         return;
       }
       if (err.errorCode == 1001) {
-        window.web3StatusHandler('rejected');
+        this.statusHandler('rejected');
         return;
       }
       if (typeof err.transactionHash == 'string'){
@@ -62,10 +72,10 @@ export class DEXAG {
       }
     }
     // Trade sent
-    window.web3StatusHandler('send_trade', status.hash);
+    this.statusHandler('send_trade', status.hash);
     const receipt = await utility.waitForReceipt(status.hash, this.provider);
     utility.track(status, details, trade)
-    utility.handleReceipt(status, receipt);
+    utility.handleReceipt(status, receipt, this.statusHandler);
   }
 
   async unwrap(amount) {
@@ -94,11 +104,13 @@ export class DEXAG {
 
   async validateWeb3(trade) {
     if(this.provider) this.signer = this.provider.getSigner();
-    return validate.web3(trade, this.provider, this.signer);
+    return validate.web3(trade, this.provider, this.signer, this.statusHandler);
   }
 
   async registerStatusHandler(handler) {
-    window.web3StatusHandler = handler;
+    console.log('registered');
+    this.statusHandler = handler;
   }
-
 }
+
+export { fromPrivateKey, fromProvider, DEXAG };

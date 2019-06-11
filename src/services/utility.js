@@ -68,11 +68,11 @@ const utility = {
     });
     return enoughWeth;
   },
-  handleReceipt: (status, receipt)=> {
+  handleReceipt: (status, receipt, handler)=> {
     if(receipt.status=='0x1'){
-      window.web3StatusHandler('mined_trade', status.hash);
+      handler('mined_trade', status.hash);
     }else{
-      window.web3StatusHandler('failed', status.hash);
+      handler('failed', status.hash);
     }
   },
   track: async(status, details, trade)=>{

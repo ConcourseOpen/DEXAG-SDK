@@ -3,13 +3,13 @@ import trading from './trading';
 import account from './account';
 
 const validate = {
-  web3: async (trade, provider, signer) => {
+  web3: async (trade, provider, signer, handler) => {
 
-    window.web3StatusHandler('init');
+    handler('init');
 
     // check that web3 exists
     if (window.web3 == undefined || Object.keys(window.web3).length == 0) {
-      window.web3StatusHandler('web3_undefined');
+      handler('web3_undefined');
       return false;
     }
 
@@ -19,14 +19,14 @@ const validate = {
         await window.ethereum.enable();
       } catch (e) {
         // user rejected screen
-        window.web3StatusHandler('connect_rejected');
+        handler('connect_rejected');
         return false;
       }
     }
 
     // Auto unlock didnt work, wallet is still locked
     if(window.web3.eth.accounts[0] == undefined){
-      window.web3StatusHandler('unlock_wallet');
+      handler('unlock_wallet');
       return;
     }
 
@@ -36,19 +36,19 @@ const validate = {
     }
 
     if (web3.version.network != 1) {
-      window.web3StatusHandler('network');
+      handler('network');
       return false;
     }
 
     // check if ether balance is insufficient
     const etherToWrap = await utility.getEtherToWrap(trade, provider, signer);
     if (etherToWrap == -1) {
-      window.web3StatusHandler('balance');
+      handler('balance');
       return false;
     }
     // wrap ether if necessary
     const wethContract = utility.getWethContract(signer);
-    const wrapping = await trading.wrap(wethContract, etherToWrap, provider);
+    const wrapping = await trading.wrap(wethContract, etherToWrap, provider, handler);
     if (!wrapping) return false;
 
     // Check if balance is insufficient
@@ -69,7 +69,7 @@ const validate = {
       console.log(err)
     }
     if (!balance) {
-      window.web3StatusHandler('balance');
+      handler('balance');
       return false;
     }
     // handle token allowance
@@ -85,8 +85,8 @@ const validate = {
 
       if (allowance.lt(tokenAmount)) {
         // allowance needs to be granted
-        window.web3StatusHandler('allowance');
-        const trading_allowance = await trading.setAllowance(tokenContract, exchangeAddress, provider);
+        handler('allowance');
+        const trading_allowance = await trading.setAllowance(tokenContract, exchangeAddress, provider, handler);
         // check if token allowance is not set
         if(!trading_allowance) return false;
       }

@@ -19,7 +19,7 @@ const trading = {
       }
     });
   },
-  setAllowance: async(tokenContract, exchangeAddress, provider) => {
+  setAllowance: async(tokenContract, exchangeAddress, provider, handler) => {
     const fast_gas = await trading.getGas();
     return new Promise(resolve => {
       try {
@@ -29,11 +29,11 @@ const trading = {
 
         promise.then(async function(status) {
           console.log(status);
-          window.web3StatusHandler('send_trade', status.hash);
+          handler('send_trade', status.hash);
           // wait for mining to finish
           const receipt = await utility.waitForReceipt(status.hash, provider);
           // mined
-          window.web3StatusHandler('mined_approve', status.hash);
+          handler('mined_approve', status.hash);
           resolve(true);
         }).catch(function(err) {
           resolve(false);
@@ -45,7 +45,7 @@ const trading = {
       }
     });
   },
-  wrap: async(wethContract, amount, provider) => {
+  wrap: async(wethContract, amount, provider, handler) => {
     const fast_gas = await trading.getGas();
     return new Promise(resolve => {
     try {
@@ -53,7 +53,7 @@ const trading = {
         resolve(true);
       } else {
         // show wrap init message
-        window.web3StatusHandler('request_wrap');
+        handler('request_wrap');
         const value = ethers.utils.bigNumberify(amount);
         const txOptions = {
           value,
@@ -63,10 +63,10 @@ const trading = {
 
         // wrap sent
         promise.then(async function(status) {
-          window.web3StatusHandler('send_wrap', status.hash);
+          handler('send_wrap', status.hash);
           const receipt = await utility.waitForReceipt(status.hash, provider);
           // wrap mined
-          window.web3StatusHandler('mined_wrap', status.hash);
+          handler('mined_wrap', status.hash);
           resolve(true);
         }).catch(function(err) {
           resolve(false);
