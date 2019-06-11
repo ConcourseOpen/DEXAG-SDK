@@ -1,5 +1,3 @@
-import BigNumber from 'bignumber.js';
-
 import utility from './utility';
 
 const account = {

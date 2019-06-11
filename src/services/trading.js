@@ -1,8 +1,6 @@
 import { ethers } from 'ethers';
 
 import utility from './utility';
-import { BigNumber as BN } from 'bignumber.js';
-
 
 const trading = {
   getGas: async () => {
