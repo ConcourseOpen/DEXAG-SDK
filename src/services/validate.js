@@ -56,11 +56,11 @@ const validate = {
     try{
       if(trade.metadata.query.from!='ETH'){
         // erc20
-        balance = await account.getERC20Balance(trade, provider, signer);
+        balance = await account.getERC20Balance(trade, signer);
       }else{
         // eth
         try{
-          balance = await account.getETHBalance(trade);
+          balance = await account.getETHBalance(trade, signer);
         }catch(err){
         }
       }

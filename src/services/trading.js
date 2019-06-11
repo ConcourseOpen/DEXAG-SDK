@@ -4,121 +4,72 @@ import utility from './utility';
 
 const trading = {
   getGas: async () => {
-    return new Promise(resolve => {
-      try {
-        fetch('https://ethgasstation.info/json/ethgasAPI.json')
-        .then(response => response.json())
-        .then(data => {
-          resolve(ethers.utils.bigNumberify(web3.toWei(data.fast / 10, 'gwei')));
-        });
-      } catch (err) {
-        // default to 5 if error
-        resolve(ethers.utils.bigNumberify(web3.toWei(5, 'gwei')));
-      }
-    });
+    const url = 'https://ethgasstation.info/json/ethgasAPI.json';
+    const response = await fetch(url);
+    const data = await response.json();
+    const gasGwei = data.safeLow / 10;
+    const gasWei = ethers.utils.bigNumberify(gasGwei * 1e9);
+    return gasWei;
   },
   setAllowance: async(tokenContract, exchangeAddress, provider, handler) => {
+    const uintMax = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
     const gasPrice = await trading.getGas();
-    return new Promise(resolve => {
-      try {
-        const uintMax = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
-        const promise = tokenContract.functions.approve(exchangeAddress, uintMax, {gasPrice});
-
-        promise.then(async function(status) {
-          handler('send_trade', status.hash);
-          // wait for mining to finish
-          const receipt = await utility.waitForReceipt(status.hash, provider);
-          // mined
-          handler('mined_approve', status.hash);
-          resolve(true);
-        }).catch(function(err) {
-          resolve(false);
-        });
-      } catch (e) {
-        resolve(false);
-      }
-    });
+    const txOptions = {
+      gasPrice,
+    };
+    const status = await tokenContract.approve(exchangeAddress, uintMax, txOptions);
+    handler('send_approve', status.hash);
+    // wait for mining to finish
+    const receipt = await utility.waitForReceipt(status.hash, provider);
+    // mined
+    handler('mined_approve', status.hash);
+    return true;
   },
   wrap: async(wethContract, amount, provider, handler) => {
-    const gasPrice = await trading.getGas();
-    return new Promise(resolve => {
-    try {
-      if (amount == 0) {
-        resolve(true);
-      } else {
-        // show wrap init message
-        handler('request_wrap');
-        const value = ethers.utils.bigNumberify(amount);
-        const txOptions = {
-          value,
-          gasPrice,
-        };
-        const promise = wethContract.deposit(txOptions);
-
-        // wrap sent
-        promise.then(async function(status) {
-          handler('send_wrap', status.hash);
-          const receipt = await utility.waitForReceipt(status.hash, provider);
-          // wrap mined
-          handler('mined_wrap', status.hash);
-          resolve(true);
-        }).catch(function(err) {
-          resolve(false);
-        });
-      }
-    } catch (e) {
-      resolve(false);
+    if (amount == 0) {
+      return true;
     }
-    });
-  },
-  unwrap: (wethContract, amount) => {
-    return new Promise(resolve => {
-      try {
-        if (amount == 0) {
-          resolve(true);
-        } else {
-          const promise = wethContract.withdraw(amount);
+    const value = ethers.utils.bigNumberify(amount.toString());
+    const gasPrice = await trading.getGas();
+    const txOptions = {
+      value,
+      gasPrice,
+    };
+    const status = await wethContract.deposit(txOptions);
 
-          promise.then(function(status) {
-            utility.waitForReceipt(status.hash, function() {
-              resolve(true);
-            });
-          }).catch(function(err) {
-            resolve(false);
-          });
-        }
-      } catch(e) {
-        resolve(false);
-      }
-    });
+    handler('send_wrap', status.hash);
+    const receipt = await utility.waitForReceipt(status.hash, provider);
+    // wrap mined
+    handler('mined_wrap', status.hash);
+    return true;
+  },
+  unwrap: async(wethContract, amount) => {
+    if (amount == 0) {
+      return true;
+    }
+    const gasPrice = await trading.getGas();
+    const txOptions = {
+      gasPrice,
+    };
+    const amountNumber = ethers.utils.bigNumberify(amount.toString());
+    const status = await wethContract.withdraw(amountNumber, txOptions);
+    handler('send_unwrap', status.hash);
+    const receipt = await utility.waitForReceipt(status.hash, provider);
+    // wrap mined
+    handler('mined_unwrap', status.hash);
+    return true;
   },
   getTrade: async ({to, from, amount, dex}) => {
-    return new Promise(resolve => {
-      try {
-        fetch(`https://api.dex.ag/trade?from=${from}&to=${to}&toAmount=${amount}&dex=${dex||'best'}`, { headers: {'Accept': 'application/json'} })
-        .then(response => response.json())
-        .then(data => {
-          resolve(data);
-        });
-      } catch (err) {
-        // default to 5 if error
-        resolve('err')
-      }
-    });
+    const url = `https://api.dex.ag/trade?from=${from}&to=${to}&fromAmount=${amount}&dex=${dex||'best'}`;
+    const response = await fetch(url);
+    const trade = await response.json();
+    return trade;
   },
   getPrice: async ({to, from, amount, dex}) => {
-    return new Promise(resolve => {
-      try {
-        fetch(`https://api.dex.ag/price?from=${from}&to=${to}&toAmount=${amount}&dex=${dex||'all'}`, { headers: {'Accept': 'application/json'} })
-        .then(response => response.json())
-        .then(data => {
-          resolve(data);
-        });
-      } catch (err) {
-        // default to 5 if error
-        resolve('err')
-      }
-    });
+    const url = `https://api.dex.ag/price?from=${from}&to=${to}&fromAmount=${amount}&dex=${dex||'all'}`;
+    const response = await fetch(url);
+    const price = await response.json();
+    return price;
   }
 };
 

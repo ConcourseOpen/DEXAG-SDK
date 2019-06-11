@@ -31,7 +31,7 @@ const utility = {
     const wethTokenAddress = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
     return new ethers.Contract(wethTokenAddress, wethAbi, signer);
   },
-  getEtherToWrap(trade, provider, signer) {
+  async getEtherToWrap(trade, provider, signer) {
     const wethTokenAddress = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
     if (!trade.metadata.input) {
       return 0;
@@ -41,32 +41,21 @@ const utility = {
     }
     const wethAmount = trade.metadata.input.amount;
     const wethContract = new ethers.Contract(wethTokenAddress, erc20Abi, signer);
-    let accountAddress;
-    let wethBalance;
-    const enoughWeth = signer.getAddress()
-    .then(address => {
-      accountAddress = address;
-      return wethContract.balanceOf(accountAddress);
-    })
-    .then(balance => {
-      wethBalance = balance;
-      return provider.getBalance(accountAddress);
-    })
-    .then(balance => {
-      if (wethBalance.gte(wethAmount)) {
-        // Enough weth, no need to wrap
-        return 0;
-      }
-      const totalBalance = balance.add(wethBalance);
-      if (totalBalance.lt(wethAmount)) {
-        // Insufficient balance
-        return -1;
-      }
-      // eth to wrap = weth required for trade - weth balance
-      const ethToWrap = wethBalance.sub(wethAmount).mul(-1);
-      return ethToWrap.toString();
-    });
-    return enoughWeth;
+    const accountAddress = await signer.getAddress();
+    const wethBalance = await wethContract.balanceOf(accountAddress);
+    const balance = await signer.getBalance();
+    if (wethBalance.gte(wethAmount)) {
+      // Enough weth, no need to wrap
+      return 0;
+    }
+    const totalBalance = balance.add(wethBalance);
+    if (totalBalance.lt(wethAmount)) {
+      // Insufficient balance
+      return -1;
+    }
+    // eth to wrap = weth required for trade - weth balance
+    const ethToWrap = wethBalance.sub(wethAmount).mul(-1);
+    return ethToWrap.toString();
   },
   handleReceipt: (status, receipt, handler)=> {
     if(receipt.status=='0x1'){

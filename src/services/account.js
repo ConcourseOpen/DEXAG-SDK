@@ -1,32 +1,17 @@
 import utility from './utility';
 
 const account = {
-  getERC20Balance: async (trade, provider, signer) => {
+  getERC20Balance: async (trade, signer) => {
     const tokenContract = utility.getTokenContract(trade, signer);
-    const address = await provider.getSigner().getAddress();
-
-    return new Promise(resolve => {
-      // get balance for token
-      const promise = tokenContract.functions.balanceOf(address);
-      promise.then(function(tokenBalance) {
-        const tokenAmount = trade.metadata.input.amount;
-        // check if insufficient funds
-        resolve(tokenBalance.gte(tokenAmount));
-      }).catch(function(err) {
-        resolve(false);
-      });
-    });
+    const address = await signer.getAddress();
+    const tokenBalance = await tokenContract.balanceOf(address);
+    const tokenAmount = trade.metadata.input.amount;
+    return tokenBalance.gte(tokenAmount);
   },
-  getETHBalance: async(trade) => {
-    const address = window.web3.eth.accounts[0];
-    const wei = utility.promisify(cb => web3.eth.getBalance(address, cb));
-    try {
-      const ethBalance = await wei;
-      const ethAmount = trade.trade.value;
-      return (ethBalance.gte(ethAmount));
-    } catch (err) {
-      return false;
-    }
+  getETHBalance: async(trade, signer) => {
+    const ethBalance = await signer.getBalance();
+    const ethAmount = trade.trade.value;
+    return ethBalance.gte(ethAmount);
   }
 };
 
