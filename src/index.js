@@ -38,8 +38,8 @@ class DEXAG {
     // Set gas and handle bancor exception
     if(details.dex!='bancor'){
       this.statusHandler('init');
-      const fast_gas = await trading.getGas();
-      tx.gasPrice = fast_gas;
+      const gasPrice = await trading.getGas();
+      tx.gasPrice = gasPrice;
     }else{
       this.statusHandler('bancor_notice');
       tx.gasPrice = ethers.utils.bigNumberify(trade.metadata.gasPrice);
