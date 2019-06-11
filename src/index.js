@@ -95,15 +95,15 @@ class DEXAG {
     return trade
   }
 
-  async tradeOrder({tx}) {
+  async trade(tx) {
     let {input, output, source, query} = tx.metadata;
     var details = {pair: {base:query.to, quote:query.from}, amount: query.fromAmount||query.toAmount, dex: source.dex, isBuying: true}
     this.sendTrade(tx, details)
   }
 
-  async validateWeb3(trade) {
+  async validate(tx) {
     if(this.provider) this.signer = this.provider.getSigner();
-    return validate.web3(trade, this.provider, this.signer, this.statusHandler);
+    return validate.web3(tx, this.provider, this.signer, this.statusHandler);
   }
 
   async registerStatusHandler(handler) {
