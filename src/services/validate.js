@@ -52,20 +52,9 @@ const validate = {
     if (!wrapping) return false;
 
     // Check if balance is insufficient
-    let balance;
-    try{
-      if(trade.metadata.query.from!='ETH'){
-        // erc20
-        balance = await account.getERC20Balance(trade, signer);
-      }else{
-        // eth
-        try{
-          balance = await account.getETHBalance(trade, signer);
-        }catch(err){
-        }
-      }
-    }catch(err){
-    }
+    const balance = trade.metadata.query.from =='ETH'
+      ? await account.getETHBalance(trade, signer)
+      : await account.getERC20Balance(trade, signer);
     if (!balance) {
       handler('balance');
       return false;
