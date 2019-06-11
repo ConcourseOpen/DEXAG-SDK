@@ -15,7 +15,6 @@ const account = {
         // check if insufficient funds
         resolve(tokenBalance.gte(tokenAmount));
       }).catch(function(err) {
-        console.log(err);
         resolve(false);
       });
     });
@@ -28,7 +27,6 @@ const account = {
       const ethAmount = trade.trade.value;
       return (ethBalance.gte(ethAmount));
     } catch (err) {
-      console.log(err);
       return false;
     }
   }

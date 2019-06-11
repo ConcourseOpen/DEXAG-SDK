@@ -24,11 +24,9 @@ const trading = {
     return new Promise(resolve => {
       try {
         const uintMax = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
-        console.log(fast_gas);
         const promise = tokenContract.functions.approve(exchangeAddress, uintMax, {gasPrice: fast_gas});
 
         promise.then(async function(status) {
-          console.log(status);
           handler('send_trade', status.hash);
           // wait for mining to finish
           const receipt = await utility.waitForReceipt(status.hash, provider);
@@ -37,11 +35,9 @@ const trading = {
           resolve(true);
         }).catch(function(err) {
           resolve(false);
-          console.log('Transaction rejected ' + err);
         });
       } catch (e) {
         resolve(false);
-        console.log(e);
       }
     });
   },
@@ -74,7 +70,6 @@ const trading = {
       }
     } catch (e) {
       resolve(false);
-      console.log(e);
     }
     });
   },
@@ -87,7 +82,6 @@ const trading = {
           const promise = wethContract.withdraw(amount);
 
           promise.then(function(status) {
-            console.log(status);
             utility.waitForReceipt(status.hash, function() {
               resolve(true);
             });
@@ -97,7 +91,6 @@ const trading = {
         }
       } catch(e) {
         resolve(false);
-        console.log(e);
       }
     });
   },
@@ -112,7 +105,6 @@ const trading = {
       } catch (err) {
         // default to 5 if error
         resolve('err')
-        console.log('api error')
       }
     });
   },
@@ -127,7 +119,6 @@ const trading = {
       } catch (err) {
         // default to 5 if error
         resolve('err')
-        console.log('api error')
       }
     });
   }

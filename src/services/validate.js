@@ -62,11 +62,9 @@ const validate = {
         try{
           balance = await account.getETHBalance(trade);
         }catch(err){
-          console.log(err)
         }
       }
     }catch(err){
-      console.log(err)
     }
     if (!balance) {
       handler('balance');

@@ -98,7 +98,6 @@ class DEXAG {
   async tradeOrder({tx}) {
     let {input, output, source, query} = tx.metadata;
     var details = {pair: {base:query.to, quote:query.from}, amount: query.fromAmount||query.toAmount, dex: source.dex, isBuying: true}
-    console.log(details)
     this.sendTrade(tx, details)
   }
 
@@ -108,7 +107,6 @@ class DEXAG {
   }
 
   async registerStatusHandler(handler) {
-    console.log('registered');
     this.statusHandler = handler;
   }
 }
