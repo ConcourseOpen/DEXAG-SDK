@@ -60,15 +60,19 @@ const trading = {
     handler('mined_unwrap', status.hash);
     return true;
   },
-  getTrade: async ({to, from, amount, dex}) => {
-    const url = `https://api.dex.ag/trade?from=${from}&to=${to}&fromAmount=${amount}&dex=${dex||'best'}`;
-    const response = await axios.get(url);
+  getTrade: async (params) => {
+    const dexagClient = axios.create({
+      baseURL: 'https://api.dex.ag/',
+    });
+    const response = await dexagClient.get('/trade', params);
     const trade = response.data;
     return trade;
   },
-  getPrice: async ({to, from, amount, dex}) => {
-    const url = `https://api.dex.ag/price?from=${from}&to=${to}&fromAmount=${amount}&dex=${dex||'all'}`;
-    const response = await axios.get(url);
+  getPrice: async (params) => {
+    const dexagClient = axios.create({
+      baseURL: 'https://api.dex.ag/',
+    });
+    const response = await dexagClient.get('/trade', params);
     const price = response.data;
     return price;
   },
