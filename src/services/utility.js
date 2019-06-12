@@ -5,17 +5,6 @@ import erc20Abi from '../../abi/erc20.json';
 import wethAbi from '../../abi/weth.json';
 
 const utility = {
-  promisify: (inner) => {
-    return new Promise((resolve, reject) => {
-      inner((err, res) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(res);
-        }
-      });
-    });
-  },
   waitForReceipt: async(hash, provider) => {
     let receipt = null;
     while (!receipt) {
