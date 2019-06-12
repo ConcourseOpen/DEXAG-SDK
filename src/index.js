@@ -101,7 +101,7 @@ class SDK {
     }
     // Trade sent
     this.statusHandler('send_trade', status.hash);
-    const receipt = await utility.waitForReceipt(status.hash, this.provider);
+    const receipt = await this.provider.waitForTransaction(status.hash);
     utility.track(status, details, trade)
     utility.handleReceipt(status, receipt, this.statusHandler);
   }

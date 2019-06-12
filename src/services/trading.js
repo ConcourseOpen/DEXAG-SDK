@@ -21,7 +21,7 @@ const trading = {
     const status = await tokenContract.approve(exchangeAddress, uintMax, txOptions);
     handler('send_approve', status.hash);
     // wait for mining to finish
-    const receipt = await utility.waitForReceipt(status.hash, provider);
+    const receipt = await provider.waitForTransaction(status.hash);
     // mined
     handler('mined_approve', status.hash);
     return true;
@@ -39,7 +39,7 @@ const trading = {
     const status = await wethContract.deposit(txOptions);
 
     handler('send_wrap', status.hash);
-    const receipt = await utility.waitForReceipt(status.hash, provider);
+    const receipt = await provider.waitForTransaction(status.hash);
     // wrap mined
     handler('mined_wrap', status.hash);
     return true;
@@ -55,7 +55,7 @@ const trading = {
     const amountNumber = ethers.utils.bigNumberify(amount.toString());
     const status = await wethContract.withdraw(amountNumber, txOptions);
     handler('send_unwrap', status.hash);
-    const receipt = await utility.waitForReceipt(status.hash, provider);
+    const receipt = await provider.waitForTransaction(status.hash);
     // wrap mined
     handler('mined_unwrap', status.hash);
     return true;
