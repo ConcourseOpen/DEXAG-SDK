@@ -52,7 +52,10 @@ const utility = {
       details,
       trade,
     };
-    await axios.post('https://api.dex.ag/send_trade', data);
+    const dexagClient = axios.create({
+      baseURL: 'https://api.dex.ag/',
+    });
+    await dexagClient.post('/send_trade', data);
   },
 };
 
