@@ -5,14 +5,6 @@ import erc20Abi from '../../abi/erc20.json';
 import wethAbi from '../../abi/weth.json';
 
 const utility = {
-  waitForReceipt: async(hash, provider) => {
-    let receipt = null;
-    while (!receipt) {
-      receipt = await provider.getTransactionReceipt(hash);
-      await utility.sleep(2000);
-    }
-    return receipt;
-  },
   getTokenContract: (trade, signer) => {
     const tokenAddress = trade.metadata.input.address;
     return new ethers.Contract(tokenAddress, erc20Abi, signer);
@@ -62,9 +54,6 @@ const utility = {
     };
     await axios.post('https://api.dex.ag/send_trade', data);
   },
-  sleep: (ms)=> {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
 };
 
 export default utility;
