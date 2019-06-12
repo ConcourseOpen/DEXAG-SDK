@@ -64,7 +64,7 @@ const trading = {
     const dexagClient = axios.create({
       baseURL: 'https://api.dex.ag/',
     });
-    const response = await dexagClient.get('/trade', params);
+    const response = await dexagClient.get('/trade', { params });
     const trade = response.data;
     return trade;
   },
@@ -72,7 +72,7 @@ const trading = {
     const dexagClient = axios.create({
       baseURL: 'https://api.dex.ag/',
     });
-    const response = await dexagClient.get('/trade', params);
+    const response = await dexagClient.get('/trade', { params });
     const price = response.data;
     return price;
   },
