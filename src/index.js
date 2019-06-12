@@ -25,13 +25,13 @@ class SDK {
     this.statusHandler = () => {} // preset status handler
   }
 
-  async getTrade({to, from, amount, dex}) {
-    const trade = await trading.getTrade({to, from, amount, dex});
+  async getTrade({to, from, fromAmount, toAmount, limitAmount, dex}) {
+    const trade = await trading.getTrade({to, from, fromAmount, toAmount, limitAmount, dex});
     return trade
   }
 
-  async getPrice({to, from, amount, dex}) {
-    const trade = await trading.getPrice({to, from, amount, dex});
+  async getPrice({to, from, fromAmount, toAmount, dex}) {
+    const trade = await trading.getPrice({to, from, fromAmount, toAmount, dex});
     return trade
   }
 
