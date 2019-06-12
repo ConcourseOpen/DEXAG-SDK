@@ -1,12 +1,13 @@
 import { ethers } from 'ethers';
+import axios from 'axios';
 
 import utility from './utility';
 
 const trading = {
   getGas: async () => {
     const url = 'https://ethgasstation.info/json/ethgasAPI.json';
-    const response = await fetch(url);
-    const data = await response.json();
+    const response = await axios.get(url);
+    const data = response.data;
     const gasGwei = data.safeLow / 10;
     const gasWei = ethers.utils.bigNumberify(gasGwei * 1e9);
     return gasWei;
@@ -61,16 +62,16 @@ const trading = {
   },
   getTrade: async ({to, from, amount, dex}) => {
     const url = `https://api.dex.ag/trade?from=${from}&to=${to}&fromAmount=${amount}&dex=${dex||'best'}`;
-    const response = await fetch(url);
-    const trade = await response.json();
+    const response = await axios.get(url);
+    const trade = response.data;
     return trade;
   },
   getPrice: async ({to, from, amount, dex}) => {
     const url = `https://api.dex.ag/price?from=${from}&to=${to}&fromAmount=${amount}&dex=${dex||'all'}`;
-    const response = await fetch(url);
-    const price = await response.json();
+    const response = await axios.get(url);
+    const price = response.data;
     return price;
-  }
+  },
 };
 
 export default trading;

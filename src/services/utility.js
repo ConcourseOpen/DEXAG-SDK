@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import axios from 'axios';
 
 import erc20Abi from '../../abi/erc20.json';
 import wethAbi from '../../abi/weth.json';
@@ -65,14 +66,12 @@ const utility = {
     }
   },
   track: async(status, details, trade)=>{
-    const response = await fetch('https://api.dex.ag/send_trade', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({status, details, trade})
-    });
+    const data = {
+      status,
+      details,
+      trade,
+    };
+    await axios.post('https://api.dex.ag/send_trade', data);
   },
   sleep: (ms)=> {
     return new Promise(resolve => setTimeout(resolve, ms));
