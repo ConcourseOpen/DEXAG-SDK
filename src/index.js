@@ -78,11 +78,6 @@ class DEXAG {
     utility.handleReceipt(status, receipt, this.statusHandler);
   }
 
-  async unwrap(amount) {
-    const wethContract = utility.getWethContract(this.signer);
-    trading.unwrap(wethContract, amount);
-  }
-
   // Public Functions
 
   async getTrade({to, from, amount, dex}) {
