@@ -9,16 +9,16 @@ function fromPrivateKey(privateKey) {
   const projectId = '135bcba44428495c86d17c754d38649d';
   const provider = new ethers.providers.InfuraProvider('homestead', projectId);
   const signer = new ethers.Wallet(privateKey, provider);
-  return new DEXAG(provider, signer);
+  return new SDK(provider, signer);
 }
 
 function fromProvider(currentProvider) {
   const provider = new ethers.providers.Web3Provider(currentProvider);
   const signer = provider.getSigner();
-  return new DEXAG(provider, signer);
+  return new SDK(provider, signer);
 }
 
-class DEXAG {
+class SDK {
   constructor(provider, signer) {
     this.provider = provider;
     this.signer = signer;
@@ -107,4 +107,9 @@ class DEXAG {
   }
 }
 
-export { fromPrivateKey, fromProvider, DEXAG };
+const DEXAG = {
+  fromPrivateKey,
+  fromProvider,
+};
+
+export default DEXAG;
