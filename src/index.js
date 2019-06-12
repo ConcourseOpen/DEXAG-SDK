@@ -102,7 +102,6 @@ class DEXAG {
   }
 
   async validate(tx) {
-    if(this.provider) this.signer = this.provider.getSigner();
     return validate.web3(tx, this.provider, this.signer, this.statusHandler);
   }
 
