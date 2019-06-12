@@ -25,7 +25,35 @@ class DEXAG {
     this.statusHandler = () => {} // preset status handler
   }
 
-  async sendTrade(trade, details) {
+  async getTrade({to, from, amount, dex}) {
+    const trade = await trading.getTrade({to, from, amount, dex});
+    return trade
+  }
+
+  async getPrice({to, from, amount, dex}) {
+    const trade = await trading.getPrice({to, from, amount, dex});
+    return trade
+  }
+
+  async trade(tx) {
+    let {input, output, source, query} = tx.metadata;
+    var details = {pair: {base:query.to, quote:query.from}, amount: query.fromAmount||query.toAmount, dex: source.dex, isBuying: true}
+    this._sendTrade(tx, details);
+  }
+
+  async sendTrade(tx, details) {
+    this._sendTrade(tx, details);
+  }
+
+  async validate(tx) {
+    return validate.web3(tx, this.provider, this.signer, this.statusHandler);
+  }
+
+  async registerStatusHandler(handler) {
+    this.statusHandler = handler;
+  }
+
+  async _sendTrade(trade, details) {
     this.statusHandler('clear');
     const value = ethers.utils.bigNumberify(trade.trade.value);
     let status = {};
@@ -76,32 +104,6 @@ class DEXAG {
     const receipt = await utility.waitForReceipt(status.hash, this.provider);
     utility.track(status, details, trade)
     utility.handleReceipt(status, receipt, this.statusHandler);
-  }
-
-  // Public Functions
-
-  async getTrade({to, from, amount, dex}) {
-    const trade = await trading.getTrade({to, from, amount, dex});
-    return trade
-  }
-
-  async getPrice({to, from, amount, dex}) {
-    const trade = await trading.getPrice({to, from, amount, dex});
-    return trade
-  }
-
-  async trade(tx) {
-    let {input, output, source, query} = tx.metadata;
-    var details = {pair: {base:query.to, quote:query.from}, amount: query.fromAmount||query.toAmount, dex: source.dex, isBuying: true}
-    this.sendTrade(tx, details)
-  }
-
-  async validate(tx) {
-    return validate.web3(tx, this.provider, this.signer, this.statusHandler);
-  }
-
-  async registerStatusHandler(handler) {
-    this.statusHandler = handler;
   }
 }
 
