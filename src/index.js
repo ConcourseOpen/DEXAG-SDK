@@ -62,13 +62,17 @@ class SDK {
       value: value,
     };
     // Set gas and handle bancor exception
+    const gasPrice = await api.getGas();
     if(details.dex!='bancor'){
       this.statusHandler('init');
-      const gasPrice = await api.getGas();
       tx.gasPrice = gasPrice;
     }else{
       this.statusHandler('bancor_notice');
-      tx.gasPrice = ethers.utils.bigNumberify(trade.metadata.gasPrice);
+      const bancorGasPrice = ethers.utils.bigNumberify(trade.metadata.gasPrice);
+      // Pick the smallest amount
+      tx.gasPrice = bancorGasPrice.lte(gasPrice)
+        ? bancorGasPrice
+        : gasPrice;
     }
     const gasLimit = await web3.estimateGas(tx, this.provider, this.signer, this.statusHandler);
     tx.gasLimit = gasLimit;
