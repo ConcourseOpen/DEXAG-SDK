@@ -79,7 +79,6 @@ class SDK {
     if (!gasLimit) {
       return;
     }
-    this.statusHandler('start_mining');
     const status = await web3.sendTrade(tx, this.signer, this.statusHandler);
     if (!status) {
       return;
