@@ -12,8 +12,8 @@ const api = {
     const url = 'https://ethgasstation.info/json/ethgasAPI.json';
     const response = await axios.get(url);
     const data = response.data;
-    const gasGwei = data.fast / 10;
-    const gasWei = ethers.utils.bigNumberify(gasGwei).mul(1e9);
+    const gasData = data.fast;
+    const gasWei = ethers.utils.bigNumberify(gasData).mul(1e9).div(10);
     return gasWei;
   },
   track: async(status, details, trade)=>{
