@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 
 // Services
-import validate from './services/validate';
+import validation from './services/validation';
 import trading from './services/trading';
 import utility from './services/utility';
 
@@ -46,7 +46,7 @@ class SDK {
   }
 
   async validate(tx) {
-    return validate.web3(tx, this.provider, this.signer, this.statusHandler);
+    return validation.validate(tx, this.provider, this.signer, this.statusHandler);
   }
 
   async registerStatusHandler(handler) {
