@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 
 // Services
 import validation from './services/validation';
-import trading from './services/trading';
+import api from './services/api';
 import utility from './services/utility';
 
 function fromPrivateKey(privateKey) {
@@ -26,12 +26,12 @@ class SDK {
   }
 
   async getTrade({to, from, fromAmount, toAmount, limitAmount, dex}) {
-    const trade = await trading.getTrade({to, from, fromAmount, toAmount, limitAmount, dex});
+    const trade = await api.getTrade({to, from, fromAmount, toAmount, limitAmount, dex});
     return trade
   }
 
   async getPrice({to, from, fromAmount, toAmount, dex}) {
-    const trade = await trading.getPrice({to, from, fromAmount, toAmount, dex});
+    const trade = await api.getPrice({to, from, fromAmount, toAmount, dex});
     return trade
   }
 
@@ -66,7 +66,7 @@ class SDK {
     // Set gas and handle bancor exception
     if(details.dex!='bancor'){
       this.statusHandler('init');
-      const gasPrice = await trading.getGas();
+      const gasPrice = await api.getGas();
       tx.gasPrice = gasPrice;
     }else{
       this.statusHandler('bancor_notice');
@@ -102,7 +102,7 @@ class SDK {
     // Trade sent
     this.statusHandler('send_trade', status.hash);
     const receipt = await this.provider.waitForTransaction(status.hash);
-    utility.track(status, details, trade)
+    api.track(status, details, trade);
     utility.handleReceipt(status, receipt, this.statusHandler);
   }
 }

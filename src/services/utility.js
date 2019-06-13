@@ -1,5 +1,4 @@
 import { ethers } from 'ethers';
-import axios from 'axios';
 
 import erc20Abi from '../../abi/erc20.json';
 import wethAbi from '../../abi/weth.json';
@@ -45,17 +44,6 @@ const utility = {
     }else{
       handler('failed', status.hash);
     }
-  },
-  track: async(status, details, trade)=>{
-    const data = {
-      status,
-      details,
-      trade,
-    };
-    const dexagClient = axios.create({
-      baseURL: 'https://api.dex.ag/',
-    });
-    await dexagClient.post('/send_trade', data);
   },
 };
 
