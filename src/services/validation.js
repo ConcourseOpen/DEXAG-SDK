@@ -85,7 +85,7 @@ async function _checkAllowance(trade, provider, signer, handler) {
   const tokenContract = utility.getTokenContract(trade, signer);
   const exchangeAddress = trade.metadata.input.spender;
   // get client address
-  const address = await provider.getSigner().getAddress();
+  const address = await signer.getAddress();
   // get allowances
   const allowance = await tokenContract.allowance(address, exchangeAddress);
   const tokenAmount = trade.metadata.input.amount;
