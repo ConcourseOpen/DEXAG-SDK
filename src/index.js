@@ -60,7 +60,6 @@ class SDK {
       to: trade.trade.to,
       data: trade.trade.data,
       value: value,
-      gasLimit: 500000
     };
     // Set gas and handle bancor exception
     if(details.dex!='bancor'){
