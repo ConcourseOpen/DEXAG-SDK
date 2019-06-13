@@ -1,6 +1,5 @@
+import web3 from './web3';
 import utility from './utility';
-import trading from './trading';
-import account from './account';
 
 const validation = {
   async validate(trade, provider, signer, handler) {
@@ -64,13 +63,13 @@ async function _checkBalance(trade, provider, signer, handler) {
   }
   // wrap ether if necessary
   const wethContract = utility.getWethContract(signer);
-  const wrapping = await trading.wrap(wethContract, etherToWrap, provider, handler);
+  const wrapping = await web3.wrap(wethContract, etherToWrap, provider, handler);
   if (!wrapping) return false;
 
   // Check if balance is insufficient
   const balance = trade.metadata.query.from =='ETH'
-    ? await account.getETHBalance(trade, signer)
-    : await account.getERC20Balance(trade, signer);
+    ? await web3.getETHBalance(trade, signer)
+    : await web3.getERC20Balance(trade, signer);
   if (!balance) {
     handler('balance');
     return false;
@@ -94,7 +93,7 @@ async function _checkAllowance(trade, provider, signer, handler) {
   if (allowance.lt(tokenAmount)) {
     // allowance needs to be granted
     handler('allowance');
-    const trading_allowance = await trading.setAllowance(tokenContract, exchangeAddress, provider, handler);
+    const trading_allowance = await web3.setAllowance(tokenContract, exchangeAddress, provider, handler);
     // check if token allowance is not set
     if (!trading_allowance) {
       return false;

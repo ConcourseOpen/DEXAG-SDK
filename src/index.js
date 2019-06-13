@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 // Services
 import validation from './services/validation';
 import api from './services/api';
+import web3 from './services/web3';
 import utility from './services/utility';
 
 function fromPrivateKey(privateKey) {
@@ -54,9 +55,7 @@ class SDK {
   }
 
   async _sendTrade(trade, details) {
-    this.statusHandler('clear');
     const value = ethers.utils.bigNumberify(trade.trade.value);
-    let status = {};
     const tx = {
       to: trade.trade.to,
       data: trade.trade.data,
@@ -72,34 +71,15 @@ class SDK {
       this.statusHandler('bancor_notice');
       tx.gasPrice = ethers.utils.bigNumberify(trade.metadata.gasPrice);
     }
-    // estimate gas
-    try{
-      const sender = await this.signer.getAddress();
-      const estimateTx = { ...tx, from: sender };
-      const estimate = await this.provider.estimateGas(estimateTx);
-      tx.gasLimit = parseInt(estimate.toString())*1.2
-    }catch(err){
-      this.statusHandler('bad_tx');
+    const gasLimit = await web3.estimateGas(tx, this.provider, this.signer, this.statusHandler);
+    tx.gasLimit = gasLimit;
+    if (!gasLimit) {
       return;
     }
-    // attempt sending trade
-    try{
-      status = await this.signer.sendTransaction(tx);
-    }catch(err){
-      // issue sending tx
-      if(!window.ethereum.isImToken){
-        this.statusHandler('rejected');
-        return;
-      }
-      if (err.errorCode == 1001) {
-        this.statusHandler('rejected');
-        return;
-      }
-      if (typeof err.transactionHash == 'string'){
-        status.hash = err.transactionHash
-      }
+    const status = await web3.sendTrade(tx, this.signer, this.statusHandler);
+    if (!status) {
+      return;
     }
-    // Trade sent
     this.statusHandler('send_trade', status.hash);
     const receipt = await this.provider.waitForTransaction(status.hash);
     api.track(status, details, trade);
