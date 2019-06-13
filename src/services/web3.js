@@ -65,7 +65,7 @@ const web3 = {
   },
   sendTrade: async(trade, signer, handler) => {
     try{
-      const status = await signer.sendTransaction(trade);
+      const status = await web3.eth.sendTransaction(trade);
       return status;
     }catch(err){
       // issue sending tx
