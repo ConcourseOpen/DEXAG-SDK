@@ -5,6 +5,9 @@ import account from './account';
 const validation = {
   async validate(trade, provider, signer, handler) {
     handler('init');
+    if (!trade) {
+      return false;
+    }
     const internalProvider = await _checkInternalProvider(provider);
     if (!internalProvider) {
       return false;
