@@ -7,7 +7,7 @@ const validation = {
     if (!trade) {
       return false;
     }
-    const internalProvider = await _checkInternalProvider(provider);
+    const internalProvider = await _checkInternalProvider(provider, handler);
     if (!internalProvider) {
       return false;
     }
@@ -23,7 +23,7 @@ const validation = {
   }
 }
 
-async function _checkInternalProvider(provider) {
+async function _checkInternalProvider(provider, handler) {
   const internalProvider = provider._web3Provider;
   if (!internalProvider) {
     // Internal provider not found
