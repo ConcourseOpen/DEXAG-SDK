@@ -79,11 +79,11 @@ class SDK {
     if (!gasLimit) {
       return;
     }
+    this.statusHandler('send_trade');
     const status = await web3.sendTrade(tx, this.signer, this.statusHandler);
     if (!status) {
       return;
     }
-    this.statusHandler('send_trade', status.hash);
     const receipt = await this.provider.waitForTransaction(status.hash);
     api.track(status, details, trade);
     utility.handleReceipt(status, receipt, this.statusHandler);
