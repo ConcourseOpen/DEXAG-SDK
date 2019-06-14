@@ -25,25 +25,17 @@ const validation = {
 
 async function _checkInternalProvider(provider, handler) {
   const internalProvider = provider._web3Provider;
-  if (!internalProvider) {
+  if (internalProvider == undefined) {
     // Internal provider not found
     console.log('internal provider not found');
     return true;
   }
 
-  if (!internalProvider.selectedAddress) {
-    try {
-      await internalProvider.enable();
-    } catch (e) {
-      // user rejected
-      handler('connect_rejected');
-      return false;
-    }
-  }
-
-  // Auto unlock didnt work, wallet is still locked
-  if (!internalProvider.selectedAddress) {
-    handler('unlock_wallet');
+  try {
+    await internalProvider.enable();
+  } catch (e) {
+    // user rejected
+    handler('connect_rejected');
     return false;
   }
 
