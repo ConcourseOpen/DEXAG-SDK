@@ -62,7 +62,21 @@ const web3 = {
       return;
     }
   },
-  sendTrade: async(trade, signer, handler) => {
+  sendTrade: async(trade, provider, signer, handler) => {
+    handler('send_trade');
+    const status = await web3._sendTradeInternal(trade, signer, handler);
+    if (!status) {
+      return;
+    }
+    const receipt = await provider.waitForTransaction(status.hash);
+    if(receipt.status=='0x1'){
+      handler('mined_trade', status.hash);
+    }else{
+      handler('failed', status.hash);
+    }
+    return status;
+  },
+  _sendTradeInternal: async(trade, signer, handler) => {
     try{
       const status = await signer.sendTransaction(trade);
       return status;

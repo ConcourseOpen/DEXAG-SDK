@@ -38,13 +38,6 @@ const utility = {
     const ethToWrap = wethBalance.sub(wethAmount).mul(-1);
     return ethToWrap.toString();
   },
-  handleReceipt: (status, receipt, handler)=> {
-    if(receipt.status=='0x1'){
-      handler('mined_trade', status.hash);
-    }else{
-      handler('failed', status.hash);
-    }
-  },
 };
 
 export default utility;
