@@ -14,6 +14,9 @@ function fromPrivateKey(privateKey) {
 }
 
 function fromProvider(currentProvider) {
+  if (!currentProvider) {
+    return new SDK();
+  }
   const provider = new ethers.providers.Web3Provider(currentProvider);
   const signer = provider.getSigner();
   return new SDK(provider, signer);
@@ -47,6 +50,10 @@ class SDK {
   }
 
   async validate(tx) {
+    if (!(this.provider) || !(this.signer)) {
+      this.statusHandler('web3_undefined');
+      return;
+    }
     return validation.validate(tx, this.provider, this.signer, this.statusHandler);
   }
 
@@ -55,6 +62,10 @@ class SDK {
   }
 
   async _sendTrade(trade, details) {
+    if (!(this.provider) || !(this.signer)) {
+      this.statusHandler('web3_undefined');
+      return;
+    }
     const value = ethers.utils.bigNumberify(trade.trade.value);
     const tx = {
       to: trade.trade.to,
