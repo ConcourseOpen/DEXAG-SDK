@@ -63,6 +63,7 @@ const web3 = {
     }
   },
   sendTrade: async(trade, provider, signer, handler) => {
+    handler('send_trade');
     const status = await web3._sendTradeInternal(trade, signer, handler);
     if (!status) {
       return;
