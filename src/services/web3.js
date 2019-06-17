@@ -10,8 +10,8 @@ const web3 = {
     const txOptions = {
       gasPrice,
     };
-    handler('send_approve');
     const status = await tokenContract.approve(exchangeAddress, uintMax, txOptions);
+    handler('send_approve', status.hash);
     // wait for mining to finish
     const receipt = await provider.waitForTransaction(status.hash);
     // mined
@@ -28,8 +28,8 @@ const web3 = {
       value,
       gasPrice,
     };
-    handler('send_wrap');
     const status = await wethContract.deposit(txOptions);
+    handler('send_wrap', status.hash);
     const receipt = await provider.waitForTransaction(status.hash);
     // wrap mined
     handler('mined_wrap', status.hash);
@@ -44,8 +44,8 @@ const web3 = {
       gasPrice,
     };
     const amountNumber = ethers.utils.bigNumberify(amount.toString());
-    handler('send_unwrap');
     const status = await wethContract.withdraw(amountNumber, txOptions);
+    handler('send_unwrap', status.hash);
     const receipt = await provider.waitForTransaction(status.hash);
     // wrap mined
     handler('mined_unwrap', status.hash);
@@ -63,11 +63,11 @@ const web3 = {
     }
   },
   sendTrade: async(trade, provider, signer, handler) => {
-    handler('send_trade');
     const status = await web3._sendTradeInternal(trade, signer, handler);
     if (!status) {
       return;
     }
+    handler('send_trade', status.hash);
     const receipt = await provider.waitForTransaction(status.hash);
     if(receipt.status=='0x1'){
       handler('mined_trade', status.hash);
