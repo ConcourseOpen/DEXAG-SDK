@@ -36,7 +36,7 @@ const api = {
     const dexagClient = axios.create({
       baseURL: 'https://api.dex.ag/',
     });
-    const response = await dexagClient.get('/trade', { params });
+    const response = await dexagClient.get('/price', { params });
     const price = response.data;
     return price;
   },
