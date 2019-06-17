@@ -1,5 +1,7 @@
 import { ethers } from 'ethers';
 
+import UncheckedSigner from './signer';
+
 // Services
 import validation from './services/validation';
 import api from './services/api';
@@ -18,7 +20,8 @@ function fromProvider(currentProvider) {
     return new SDK();
   }
   const provider = new ethers.providers.Web3Provider(currentProvider);
-  const signer = provider.getSigner();
+  const innerSigner = provider.getSigner();
+  const signer = new UncheckedSigner(innerSigner);
   return new SDK(provider, signer);
 }
 
