@@ -7,28 +7,28 @@ Try trading on [DEX.AG](https://dex.ag) or [DEX.AG Checkout](https://checkout.de
 Install the package from [NPM](https://www.npmjs.com/package/dexag-sdk)
 
 ```
-npm install dexag-sdk --save
+npm install dexag-sdk
 ```
 
 ## Usage
 ```
-import {DEXAG} from 'dexag-sdk'
-const sdk = new DEXAG();
+import DEXAG from 'dexag-sdk';
+const sdk = DEXAG.fromProvider(window.ethereum);
 ```
 
 ## Get the best price for 1 DAI with ETH
 ```
-// trade contains all details to execute the trade
-let trade = await sdk.getTrade({to: 'DAI', from: 'ETH', amount: 1})
+// pass trade parameters to get the transaction data
+const tx = await sdk.getTrade({to: 'DAI', from: 'ETH', toAmount: 1});
 ```
 
 ## Checkout
 Initiate the checkout process to validate the clients balance, set token allowance, wrap ETH, track transaction mining, ect.
 ```
-const valid = await sdk.validateWeb3(trade);
+const valid = await sdk.validate(tx);
 if (valid) {
-// web3 is valid, trade order
-  sdk.tradeOrder({tx: trade});
+  // transaction data is valid, trade
+  sdk.trade(tx);
 }
 ```
 
