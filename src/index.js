@@ -45,11 +45,11 @@ class SDK {
   async trade(tx) {
     let {input, output, source, query} = tx.metadata;
     var details = {pair: {base:query.to, quote:query.from}, amount: query.fromAmount||query.toAmount, dex: source.dex, isBuying: true}
-    this._sendTrade(tx, details);
+    await this._sendTrade(tx, details);
   }
 
   async sendTrade(tx, details) {
-    this._sendTrade(tx, details);
+    await this._sendTrade(tx, details);
   }
 
   async validate(tx) {
@@ -57,7 +57,7 @@ class SDK {
       this.statusHandler('web3_undefined');
       return;
     }
-    return validation.validate(tx, this.provider, this.signer, this.statusHandler);
+    return await validation.validate(tx, this.provider, this.signer, this.statusHandler);
   }
 
   async registerStatusHandler(handler) {
