@@ -27,7 +27,6 @@ async function _checkInternalProvider(provider, handler) {
   const internalProvider = provider._web3Provider;
   if (internalProvider == undefined) {
     // Internal provider not found
-    console.log('internal provider not found');
     return true;
   }
 
