@@ -84,9 +84,9 @@ async function _checkAllowance(trade, provider, signer, handler) {
   if (allowance.lt(tokenAmount)) {
     // allowance needs to be granted
     handler('allowance');
-    const trading_allowance = await web3.setAllowance(tokenContract, exchangeAddress, provider, handler);
+    const tradingAllowance = await web3.setAllowance(tokenContract, exchangeAddress, provider, handler);
     // check if token allowance is not set
-    if (!trading_allowance) {
+    if (!tradingAllowance) {
       return false;
     }
   }

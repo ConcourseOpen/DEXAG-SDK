@@ -4,11 +4,11 @@ import erc20Abi from '../../abi/erc20.json';
 import wethAbi from '../../abi/weth.json';
 
 const utility = {
-  getTokenContract: (trade, signer) => {
+  getTokenContract(trade, signer) {
     const tokenAddress = trade.metadata.input.address;
     return new ethers.Contract(tokenAddress, erc20Abi, signer);
   },
-  getWethContract: (signer) => {
+  getWethContract(signer) {
     const wethTokenAddress = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
     return new ethers.Contract(wethTokenAddress, wethAbi, signer);
   },

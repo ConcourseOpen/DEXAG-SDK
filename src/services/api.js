@@ -8,7 +8,7 @@ const dexagClient = axios.create({
 });
 
 const api = {
-  getGas: async () => {
+  async getGas() {
     const url = 'https://ethgasstation.info/json/ethgasAPI.json';
     const response = await axios.get(url);
     const data = response.data;
@@ -16,7 +16,7 @@ const api = {
     const gasWei = ethers.utils.bigNumberify(gasData).mul(1e9).div(10);
     return gasWei;
   },
-  track: async(status, details, trade)=>{
+  async track(status, details, trade) {
     const data = {
       status,
       details,
@@ -24,7 +24,7 @@ const api = {
     };
     await dexagClient.post('/send_trade', data);
   },
-  getTrade: async (params) => {
+  async getTrade(params) {
     const dexagClient = axios.create({
       baseURL: 'https://api.dex.ag/',
     });
@@ -32,7 +32,7 @@ const api = {
     const trade = response.data;
     return trade;
   },
-  getPrice: async (params) => {
+  async getPrice(params) {
     const dexagClient = axios.create({
       baseURL: 'https://api.dex.ag/',
     });

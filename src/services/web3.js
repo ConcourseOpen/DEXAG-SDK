@@ -4,7 +4,7 @@ import api from './api';
 import utility from './utility';
 
 const web3 = {
-  setAllowance: async(tokenContract, exchangeAddress, provider, handler) => {
+  async setAllowance(tokenContract, exchangeAddress, provider, handler) {
     const uintMax = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
     const gasPrice = await api.getGas();
     const txOptions = {
@@ -18,7 +18,7 @@ const web3 = {
     handler('mined_approve', status.hash);
     return true;
   },
-  wrap: async(wethContract, amount, provider, handler) => {
+  async wrap(wethContract, amount, provider, handler) {
     if (amount == 0) {
       return true;
     }
@@ -35,7 +35,7 @@ const web3 = {
     handler('mined_wrap', status.hash);
     return true;
   },
-  unwrap: async(wethContract, amount) => {
+  async unwrap(wethContract, amount) {
     if (amount == 0) {
       return true;
     }
@@ -51,7 +51,7 @@ const web3 = {
     handler('mined_unwrap', status.hash);
     return true;
   },
-  estimateGas: async(trade, provider, signer, handler) => {
+  async estimateGas(trade, provider, signer, handler) {
     try{
       const sender = await signer.getAddress();
       const estimateTx = { ...trade, from: sender };
@@ -62,7 +62,7 @@ const web3 = {
       return;
     }
   },
-  sendTrade: async(trade, provider, signer, handler) => {
+  async sendTrade(trade, provider, signer, handler) {
     const status = await web3._sendTradeInternal(trade, signer, handler);
     if (!status) {
       return;
@@ -76,7 +76,19 @@ const web3 = {
     }
     return status;
   },
-  _sendTradeInternal: async(trade, signer, handler) => {
+  async getERC20Balance(trade, signer) {
+    const tokenContract = utility.getTokenContract(trade, signer);
+    const address = await signer.getAddress();
+    const tokenBalance = await tokenContract.balanceOf(address);
+    const tokenAmount = trade.metadata.input.amount;
+    return tokenBalance.gte(tokenAmount);
+  },
+  async getETHBalance(trade, signer) {
+    const ethBalance = await signer.getBalance();
+    const ethAmount = trade.trade.value;
+    return ethBalance.gte(ethAmount);
+  },
+  async _sendTradeInternal(trade, signer, handler) {
     try{
       const status = await signer.sendTransaction(trade);
       return status;
@@ -98,18 +110,6 @@ const web3 = {
     }
     return;
   },
-  getERC20Balance: async (trade, signer) => {
-    const tokenContract = utility.getTokenContract(trade, signer);
-    const address = await signer.getAddress();
-    const tokenBalance = await tokenContract.balanceOf(address);
-    const tokenAmount = trade.metadata.input.amount;
-    return tokenBalance.gte(tokenAmount);
-  },
-  getETHBalance: async(trade, signer) => {
-    const ethBalance = await signer.getBalance();
-    const ethAmount = trade.trade.value;
-    return ethBalance.gte(ethAmount);
-  }
 };
 
 export default web3;

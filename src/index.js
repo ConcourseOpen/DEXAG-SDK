@@ -29,22 +29,22 @@ class SDK {
   constructor(provider, signer) {
     this.provider = provider;
     this.signer = signer;
-    this.statusHandler = () => {} // preset status handler
+    this.statusHandler = () => {};
   }
 
-  async getTrade({to, from, fromAmount, toAmount, limitAmount, dex}) {
-    const trade = await api.getTrade({to, from, fromAmount, toAmount, limitAmount, dex});
-    return trade
+  async getTrade(params) {
+    const trade = await api.getTrade(params);
+    return trade;
   }
 
-  async getPrice({to, from, fromAmount, toAmount, dex}) {
-    const trade = await api.getPrice({to, from, fromAmount, toAmount, dex});
-    return trade
+  async getPrice(params) {
+    const trade = await api.getPrice(params);
+    return trade;
   }
 
   async trade(tx) {
-    let {input, output, source, query} = tx.metadata;
-    var details = {pair: {base:query.to, quote:query.from}, amount: query.fromAmount||query.toAmount, dex: source.dex, isBuying: true}
+    const { source, query } = tx.metadata;
+    const details = {pair: {base:query.to, quote:query.from}, amount: query.fromAmount||query.toAmount, dex: source.dex, isBuying: true};
     await this._sendTrade(tx, details);
   }
 
