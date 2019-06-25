@@ -38,6 +38,8 @@ async function _checkInternalProvider(provider, handler) {
     return false;
   }
 
+  const debugString = `test: ${internalProvider.networkVersion} ${web3.version.network}`;
+  alert(debugString);
   const networkId = internalProvider.networkVersion || web3.version.network;
 
   if (networkId != 1) {
