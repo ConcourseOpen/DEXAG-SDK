@@ -38,7 +38,9 @@ async function _checkInternalProvider(provider, handler) {
     return false;
   }
 
-  if (internalProvider.networkVersion != "1") {
+  const networkId = internalProvider.networkVersion || web3.version.network;
+
+  if (networkId != 1) {
     handler('network');
     return false;
   }
