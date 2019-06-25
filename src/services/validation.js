@@ -38,9 +38,7 @@ async function _checkInternalProvider(provider, handler) {
     return false;
   }
 
-  const debugString = `test: ${JSON.stringify(internalProvider)} ${JSON.stringify(web3.version)}`;
-  alert(debugString);
-  const networkId = internalProvider.networkVersion || web3.version.network;
+  const networkId = internalProvider.networkVersion || await _getNetworkAsync();
 
   if (networkId != 1) {
     handler('network');
@@ -95,6 +93,17 @@ async function _checkAllowance(trade, provider, signer, handler) {
     }
   }
   return true;
+}
+
+function _getNetworkAsync() {
+  return new Promise(function(resolve, reject) {
+    window.web3.version.getNetwork((err, networkId) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(networkId);
+    })
+  })
 }
 
 export default validation;
