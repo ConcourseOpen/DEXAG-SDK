@@ -38,7 +38,7 @@ async function _checkInternalProvider(provider, handler) {
     return false;
   }
 
-  const debugString = `test: ${internalProvider.networkVersion} ${web3.version.network}`;
+  const debugString = `test: ${JSON.stringify(internalProvider)} ${JSON.stringify(web3.version)}`;
   alert(debugString);
   const networkId = internalProvider.networkVersion || web3.version.network;
 
