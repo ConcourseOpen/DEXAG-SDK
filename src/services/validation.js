@@ -97,6 +97,9 @@ async function _checkAllowance(trade, provider, signer, handler) {
 
 function _getNetworkAsync() {
   return new Promise(function(resolve, reject) {
+    if ('netVersion' in window.web3.currentProvider) {
+      resolve(window.web3.currentProvider.netVersion);
+    }
     window.web3.version.getNetwork((err, networkId) => {
       if (err) {
         reject(err);
