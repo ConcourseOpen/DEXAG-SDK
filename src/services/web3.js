@@ -14,9 +14,7 @@ const web3 = {
     try {
       status = await tokenContract.approve(exchangeAddress, uintMax, txOptions);
     } catch(err) {
-      status = web3._handleTxError(err, handler);
-    }
-    if (!status) {
+      handler('rejected');
       return false;
     }
     handler('send_approve', status.hash);
@@ -40,9 +38,7 @@ const web3 = {
     try {
       status = await wethContract.deposit(txOptions);
     } catch(err) {
-      status = web3._handleTxError(err, handler);
-    }
-    if (!status) {
+      handler('rejected');
       return false;
     }
     handler('send_wrap', status.hash);
@@ -64,9 +60,7 @@ const web3 = {
     try {
       status = await wethContract.withdraw(amountNumber, txOptions);
     } catch(err) {
-      status = web3._handleTxError(err, handler);
-    }
-    if (!status) {
+      handler('rejected');
       return false;
     }
     handler('send_unwrap', status.hash);
@@ -117,23 +111,8 @@ const web3 = {
       const status = await signer.sendTransaction(trade);
       return status;
     }catch(err){
-      return web3._handleTxError(err, handler);
-    }
-  },
-  _handleTxError(err, handler) {
-    // issue sending tx
-    if(!window || !window.ethereum || !window.ethereum.isImToken){
       handler('rejected');
       return;
-    }
-    if (err.errorCode == 1001) {
-      handler('rejected');
-      return;
-    }
-    if (typeof err.transactionHash == 'string'){
-      return {
-        hash: err.transactionHash
-      }
     }
   },
 };
