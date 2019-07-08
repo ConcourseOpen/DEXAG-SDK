@@ -3,7 +3,6 @@ import utility from './utility';
 
 const validation = {
   async validate(trade, provider, signer, handler) {
-    handler('init');
     if (!trade) {
       return false;
     }
