@@ -1,6 +1,6 @@
 {
   "name": "dexag-sdk",
-  "version": "2.1.16",
+  "version": "2.1.17",
   "description": "",
   "main": "lib/index.js",
   "scripts": {

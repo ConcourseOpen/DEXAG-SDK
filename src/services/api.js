@@ -8,11 +8,23 @@ const dexagClient = axios.create({
 });
 
 const api = {
-  async getGas() {
+  async getGas(metadata) {
     const url = 'https://ethgasstation.info/json/ethgasAPI.json';
     const response = await axios.get(url);
     const data = response.data;
-    const gasData = data.fast;
+    let gasData = data.fast;
+    // Up gas price for non bancor transactions - by 0.6 gwei
+    try{
+      if(!metadata.source.liquidity.bancor && metadata.query.dex!='bancor'){
+        gasData+=6;
+      }
+    }catch(err){
+      try{
+        if(metadata.source==undefined && metadata.query.dex!='bancor'){
+          gasData+=6;
+        }
+      }catch(err){}
+    }
     const gasWei = ethers.utils.bigNumberify(gasData).mul(1e9).div(10);
     return gasWei;
   },

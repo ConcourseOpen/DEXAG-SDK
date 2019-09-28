@@ -76,7 +76,7 @@ class SDK {
       value: value,
     };
     // Set gas and handle bancor exception
-    const gasPrice = await api.getGas();
+    const gasPrice = await api.getGas(trade.metadata);
     tx.gasPrice = gasPrice;
     if (trade.metadata.gasPrice) {
       this.statusHandler('bancor_notice');
