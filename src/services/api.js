@@ -16,12 +16,12 @@ const api = {
     // Up gas price for non bancor transactions - by 0.6 gwei
     try{
       if(!metadata.source.liquidity.bancor && metadata.query.dex!='bancor'){
-        gasData+=6;
+        gasData+=10;
       }
     }catch(err){
       try{
         if(metadata.source==undefined && metadata.query.dex!='bancor'){
-          gasData+=6;
+          gasData+=10;
         }
       }catch(err){}
     }
