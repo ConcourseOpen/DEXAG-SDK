@@ -94,6 +94,20 @@ const web3 = {
     }
     return status;
   },
+  async send(send, provider, signer, handler) {
+    const status = await web3._sendTradeInternal(send, signer, handler);
+    if (!status) {
+      return;
+    }
+    handler('send', status.hash);
+    const receipt = await provider.waitForTransaction(status.hash);
+    if(receipt.status=='0x1'){
+      handler('mined_send', status.hash);
+    }else{
+      handler('failed', status.hash);
+    }
+    return status;
+  },
   async getERC20Balance(trade, signer) {
     const tokenContract = utility.getTokenContract(trade, signer);
     const address = await signer.getAddress();

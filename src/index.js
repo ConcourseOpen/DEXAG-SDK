@@ -37,6 +37,16 @@ class SDK {
     return trade;
   }
 
+  async getTradeAndSend(params) {
+    const trade = await api.getTradeAndSend(params);
+    return trade;
+  }
+
+  async getSend(params) {
+    const trade = await api.getSend(params);
+    return trade;
+  }
+
   async getPrice(params) {
     const trade = await api.getPrice(params);
     return trade;
@@ -50,6 +60,14 @@ class SDK {
 
   async sendTrade(tx, details) {
     await this._sendTrade(tx, details);
+  }
+
+  async sendTradeAndSend(tx, details) {
+    await this._sendTrade(tx, details);
+  }
+
+  async send(tx, details) {
+    await this._send(tx);
   }
 
   async validate(tx) {
@@ -95,6 +113,31 @@ class SDK {
       return;
     }
     api.track(status, details, trade);
+  }
+
+  async _send(send) {
+    if (!(this.provider) || !(this.signer)) {
+      this.statusHandler('web3_undefined');
+      return;
+    }
+    const value = ethers.utils.bigNumberify(send.value);
+    const tx = {
+      to: send.to,
+      data: send.data ? send.data : '0x',
+      value: value,
+    };
+    // Set gas and handle bancor exception
+    const gasPrice = await api.getGas(trade.metadata);
+    tx.gasPrice = gasPrice;
+    const gasLimit = await web3.estimateGas(tx, this.provider, this.signer, this.statusHandler);
+    tx.gasLimit = gasLimit;
+    if (!gasLimit) {
+      return;
+    }
+    const status = await web3.send(tx, this.provider, this.signer, this.statusHandler);
+    if (!status) {
+      return;
+    }
   }
 }
 

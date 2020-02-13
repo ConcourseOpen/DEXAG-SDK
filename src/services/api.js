@@ -44,6 +44,22 @@ const api = {
     const trade = response.data;
     return trade;
   },
+  async getTradeAndSend(params) {
+    const dexagClient = axios.create({
+      baseURL: 'https://api-v2.dex.ag/',
+    });
+    const response = await dexagClient.get('/tradeAndSend', { params });
+    const trade = response.data;
+    return trade;
+  },
+  async getSend(params) {
+    const dexagClient = axios.create({
+      baseURL: 'https://api-v2.dex.ag/',
+    });
+    const response = await dexagClient.get('/send', { params });
+    const send = response.data;
+    return send;
+  },
   async getPrice(params) {
     const dexagClient = axios.create({
       baseURL: 'https://api-v2.dex.ag/',
