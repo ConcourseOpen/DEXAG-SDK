@@ -36,7 +36,6 @@ async function _checkInternalProvider(provider, handler) {
     handler('connect_rejected');
     return false;
   }
-
   const networkId = internalProvider.networkVersion || await _getNetworkAsync();
 
   if (networkId != 1) {
@@ -96,16 +95,20 @@ async function _checkAllowance(trade, provider, signer, handler) {
 
 function _getNetworkAsync() {
   return new Promise(function(resolve, reject) {
-    if ('netVersion' in window.web3.currentProvider) {
-      resolve(window.web3.currentProvider.netVersion);
-    }
-    window.web3.version.getNetwork((err, networkId) => {
-      if (err) {
-        reject(err);
+    if (window.web3) {
+      if ('netVersion' in window.web3.currentProvider) {
+        resolve(window.web3.currentProvider.netVersion);
       }
-      resolve(networkId);
-    })
-  })
+      window.web3.version.getNetwork((err, networkId) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(networkId);
+      })
+    } else {
+      resolve(1)
+    }
+  }) 
 }
 
 export default validation;
