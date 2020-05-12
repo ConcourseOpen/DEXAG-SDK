@@ -90,7 +90,7 @@ class SDK {
     if (!gasLimit) {
       return;
     }
-    console.log('gas price', tx.gasPrice.toFixed());
+    console.log('gas price', tx.gasPrice.toString());
     const status = await web3.sendTrade(tx, this.provider, this.signer, this.statusHandler);
     if (!status) {
       return;
