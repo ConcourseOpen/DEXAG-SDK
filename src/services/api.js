@@ -13,19 +13,7 @@ const api = {
     const response = await axios.get(url);
     const data = response.data;
     let gasData = data.fast;
-    // Up gas price for non bancor transactions - by 0.6 gwei
-    try{
-      if(!metadata.source.liquidity.bancor && metadata.query.dex!='bancor'){
-        gasData+=10;
-      }
-    }catch(err){
-      try{
-        if(metadata.source==undefined && metadata.query.dex!='bancor'){
-          gasData+=10;
-        }
-      }catch(err){}
-    }
-    const gasWei = ethers.utils.bigNumberify(gasData).mul(1e9).div(10);
+    const gasWei = ethers.utils.bigNumberify(gasData).div(10).plus(0.12).mul(1e9).toFixed(0);
     return gasWei;
   },
   async track(status, details, trade) {

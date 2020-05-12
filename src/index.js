@@ -90,6 +90,7 @@ class SDK {
     if (!gasLimit) {
       return;
     }
+    console.log('sending trade', tx);
     const status = await web3.sendTrade(tx, this.provider, this.signer, this.statusHandler);
     if (!status) {
       return;
