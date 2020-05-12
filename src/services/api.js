@@ -13,7 +13,7 @@ const api = {
     const response = await axios.get(url);
     const data = response.data;
     let gasData = data.fast;
-    const gasWei = ethers.utils.bigNumberify(gasData).div(10).plus(0.12).mul(1e9).toFixed(0);
+    const gasWei = ethers.utils.bigNumberify(gasData).div(10).add(0.12).mul(1e9);
     return gasWei;
   },
   async track(status, details, trade) {
