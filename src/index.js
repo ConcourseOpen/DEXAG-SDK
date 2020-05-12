@@ -79,6 +79,7 @@ class SDK {
     const gasPrice = await api.getGas(trade.metadata);
     tx.gasPrice = gasPrice;
     if (trade.metadata.gasPrice) {
+      console.log('gasPrice specified with trade');
       this.statusHandler('bancor_notice');
       const bancorGasPrice = ethers.utils.bigNumberify(trade.metadata.gasPrice);
       if (bancorGasPrice.lte(gasPrice)) {
@@ -91,6 +92,7 @@ class SDK {
       return;
     }
     console.log('gas price', tx.gasPrice.toString());
+    console.log('trade', tx);
     const status = await web3.sendTrade(tx, this.provider, this.signer, this.statusHandler);
     if (!status) {
       return;
