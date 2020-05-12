@@ -1,19 +1,17 @@
 import axios from 'axios';
 import { ethers } from 'ethers';
 
-import utility from './utility';
-
 const dexagClient = axios.create({
   baseURL: 'https://api.dex.ag/',
 });
 
 const api = {
-  async getGas(metadata) {
+  async getGas() {
     const url = 'https://ethgasstation.info/json/ethgasAPI.json';
     const response = await axios.get(url);
     const data = response.data;
     let gasData = data.fast;
-    const gasWei = ethers.utils.bigNumberify(gasData).div(10).add(0.12).mul(1e9);
+    const gasWei = ethers.utils.bigNumberify(String((gasData / 10 + 0.12) * 1e9));
     return gasWei;
   },
   async track(status, details, trade) {
