@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
 
 const dexagClient = axios.create({
   baseURL: 'https://api.dex.ag/',
@@ -12,7 +13,7 @@ const api = {
     const data = response.data;
     let gasData = data.fast;
     const gasWei = ethers.utils.bigNumberify(String((gasData / 10 + 0.12) * 1e9));
-    return gasWei;
+    return new BigNumber(gasWei).toFixed(0);
   },
   async track(status, details, trade) {
     const data = {
