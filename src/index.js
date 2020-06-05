@@ -76,7 +76,8 @@ class SDK {
       value: value,
     };
     // Set gas and handle bancor exception
-    const gasPrice = await api.getGas(trade.metadata);
+    let gasPrice = await api.getGas();
+    gasPrice = Math.floor(gasPrice.toNumber())
     tx.gasPrice = gasPrice;
     if (trade.metadata.gasPrice) {
       console.log('gasPrice specified with trade');
