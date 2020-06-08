@@ -11,8 +11,7 @@ const api = {
     const response = await axios.get(url);
     const data = response.data;
     let gasData = data.fast;
-    let gasWei = ethers.utils.bigNumberify(String((gasData / 10 + 0.12) * 1e9));
-    gasWei = gasWei.toNumber()
+    let gasWei = (Number(gasData) / 10 + 0.12) * Math.pow(10, 9);
     return Math.round(gasWei);
   },
   async track(status, details, trade) {
