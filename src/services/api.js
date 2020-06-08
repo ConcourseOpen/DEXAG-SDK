@@ -10,7 +10,7 @@ const api = {
     const url = 'https://ethgasstation.info/json/ethgasAPI.json';
     const response = await axios.get(url);
     const data = response.data;
-    let gasData = data.fast;
+    let gasData = 340.0;
     let gasWei = (Number(gasData) / 10 + 0.12) * Math.pow(10, 9);
     return Math.round(gasWei);
   },
