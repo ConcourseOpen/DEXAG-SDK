@@ -12,7 +12,7 @@ const api = {
     const data = response.data;
     let gasData = data.fast;
     const gasWei = ethers.utils.bigNumberify(String((gasData / 10 + 0.12) * 1e9));
-    return gasWei;
+    return Math.floor(Number(gasWei);
   },
   async track(status, details, trade) {
     const data = {
