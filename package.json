@@ -19,7 +19,7 @@
   "homepage": "https://github.com/ConcourseOpen/DEXAG-SDK#readme",
   "dependencies": {
     "@babel/runtime": "^7.3.4",
-    "axios": "^0.19.0",
+    "axios": "^0.21.2",
     "ethers": "^4.0.27"
   },
   "devDependencies": {
